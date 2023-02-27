@@ -1,6 +1,7 @@
 package Complaint_and_Query_Management_System;
 
 public class Staff {
+	private String type;
 	private String staffId;
 	private String fName;
 	private String lName;

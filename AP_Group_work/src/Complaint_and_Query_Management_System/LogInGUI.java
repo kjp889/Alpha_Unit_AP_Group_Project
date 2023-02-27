@@ -5,6 +5,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -25,10 +28,12 @@ public class LogInGUI extends JFrame implements ActionListener{
 	private JPanel passwordPanel;
 	private JPanel buttonPanel;
 	private JInternalFrame iFrame;
+	private static final Logger Logger = LogManager.getLogger(LogInGUI.class);
+
 	
 	public LogInGUI() {
-		iFrame = new JInternalFrame("Internal Frame", true, true, true, true);
-		usernameLabel = new JLabel("Username: ");
+		iFrame = new JInternalFrame();
+		usernameLabel = new JLabel();
 		passwordLabel = new JLabel();
 		usernameTextField = new JTextField(20);
 		passwordField = new JPasswordField(20);
@@ -48,13 +53,17 @@ public class LogInGUI extends JFrame implements ActionListener{
 		
 		iFrame.setTitle("LogIn");
 		iFrame.setVisible(true);
+		iFrame.setSize(500, 1000);
+		iFrame.setLocation(500,500);
 		
-		namePanel.setSize(new Dimension(450, 30));
+		namePanel.setSize(400,30);
+		usernameLabel.setText("Username: ");
 		namePanel.add(usernameLabel);
 		namePanel.add(usernameTextField);
+		namePanel.setVisible(true);
 		add(namePanel);
 		
-		passwordPanel.setSize(new Dimension(450,30));
+		passwordPanel.setSize(400,30);
 		passwordLabel.setText("Password: ");
 		passwordPanel.add(passwordLabel);
 		passwordPanel.add(passwordField);
@@ -64,18 +73,22 @@ public class LogInGUI extends JFrame implements ActionListener{
 		buttonPanel.add(button);
 		add(buttonPanel);
 			
-		setSize(new Dimension(420,420));
+		//add(iFrame);
+		setSize(500,420);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		setLocationRelativeTo(null);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		JOptionPane.showMessageDialog(this, "Sign in button"
-				+ "click...", "Flowlayout Example", JOptionPane.INFORMATION_MESSAGE);	
+				+ "click...", "Flowlayout Example", JOptionPane.INFORMATION_MESSAGE);
+		
 	}
 	
+		
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new LogInGUI();
