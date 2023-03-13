@@ -8,9 +8,19 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.event.service.spi.DuplicationStrategy.Action;
+
+
+
+//import sun.rmi.transport.Connection;
 
 //import com.sun.media.sound.Toolkit;
 
@@ -24,7 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LogInGUI extends JFrame implements ActionListener{
+public class LogInGUI extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JLabel usernameLabel;
 	private JLabel passwordLabel;
@@ -40,8 +50,8 @@ public class LogInGUI extends JFrame implements ActionListener{
 	private JLabel iconLabel;
 	private JLabel iconLabel2;
 	private JLabel textLabel;
-	private JButton submit;
-	
+	private JButton login;
+
 	
 	//private static final Logger Logger = LogManager.getLogger(LogInGUI.class);
 
@@ -51,7 +61,32 @@ public class LogInGUI extends JFrame implements ActionListener{
 		usernameLabel = new JLabel("USERNAME");
 		passwordLabel = new JLabel("PASSWORD");
 		textLabel = new JLabel("Student Login");
-		submit = new JButton("Submit");
+		login = new JButton("Login");
+		login.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+				
+					 
+					 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/utech","root","");
+					Statement stmt=con.createStatement();
+					String sql = "Select * from utech where id = '"+ usernameTextField.getText() +"'and last_name = '"+ passwordField.getText() + "'";
+					ResultSet rs = stmt.executeQuery(sql);
+					if(rs.next()) {
+						JOptionPane.showMessageDialog(null,"Login Successfully");
+						new LogInGUI().hide();
+				}
+					else
+						JOptionPane.showMessageDialog(null,"Incorect username and password");
+					con.close();
+					new LogInGUI().hide();
+				}catch (Exception e) {
+					System.out.print(e);
+				}
+				
+		}});
+			
+		
 		usernameTextField = new JTextField(20);
 		passwordField = new JPasswordField(20);
 		button = new JButton("Sign In");
@@ -86,7 +121,7 @@ public class LogInGUI extends JFrame implements ActionListener{
 		setTitle("UTECH");
 	}
 	private void button() {
-		submit.setBounds(170, 500, 80, 30);
+		login.setBounds(170, 500, 80, 30);
 	}
 	private void Label() {
 		usernameLabel.setFont(new Font("Calibri", Font.BOLD, 14));
@@ -124,7 +159,7 @@ public class LogInGUI extends JFrame implements ActionListener{
 		panel2.add(usernameTextField);
 		panel2.add(passwordField);
 		panel2.add(textLabel);
-		panel2.add(submit);
+		panel2.add(login);
 		add(panel1);
 		add(panel2);
 		
@@ -156,22 +191,21 @@ public class LogInGUI extends JFrame implements ActionListener{
 		//setVisible(true);
 		setLocationRelativeTo(null);
 	}
-	public void icon() {
-		
-		
-	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(this, "Sign in button"
-				+ "click...", "Flowlayout Example", JOptionPane.INFORMATION_MESSAGE);
-		
-	}
+
+//	@Override
+
+	
+
 	
 		
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new LogInGUI();
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
