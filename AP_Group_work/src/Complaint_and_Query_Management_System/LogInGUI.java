@@ -57,7 +57,7 @@ public class LogInGUI extends JFrame implements ActionListener {
 
 	
 	public LogInGUI() {
-		iFrame = new JInternalFrame();
+	//	iFrame = new JInternalFrame();
 		usernameLabel = new JLabel("USERNAME");
 		passwordLabel = new JLabel("PASSWORD");
 		textLabel = new JLabel("Student Login");
@@ -74,7 +74,9 @@ public class LogInGUI extends JFrame implements ActionListener {
 					ResultSet rs = stmt.executeQuery(sql);
 					if(rs.next()) {
 						JOptionPane.showMessageDialog(null,"Login Successfully");
-						new LogInGUI().hide();
+						new LogInGUI().setVisible(false);
+						setVisible(false);
+						new Student_gui();
 				}
 					else
 						JOptionPane.showMessageDialog(null,"Incorect username and password");
@@ -113,7 +115,7 @@ public class LogInGUI extends JFrame implements ActionListener {
        
       //  setIconImage(icon.getImage());
         iconLabel2 = new JLabel(icon2);
-        
+
         
         // make the frame visible
         setVisible(true);
@@ -132,9 +134,9 @@ public class LogInGUI extends JFrame implements ActionListener {
 		passwordLabel.setFont(new Font("Calibri", Font.BOLD, 14));
 		iconLabel.setBounds(20, 0, 150, 100);
 		iconLabel2.setBounds(100, 10, 200, 200);
-		usernameLabel.setForeground(Color.WHITE);
-		textLabel.setForeground(Color.WHITE);
-		passwordLabel.setForeground(Color.WHITE);
+		usernameLabel.setForeground(Color.BLACK);
+		textLabel.setForeground(Color.BLACK);
+		passwordLabel.setForeground(Color.BLACK);
 	}
 
 	private void Textbox() {
@@ -148,9 +150,9 @@ public class LogInGUI extends JFrame implements ActionListener {
 		Label();
 		Textbox();
 		panel1.setBounds(0, 0, 550, 750);
-		panel1.setBackground(new Color(54,71,90));
+		panel1.setBackground(new Color(5,14,35));
 		panel2.setBounds(550, 0, 450, 750);
-		panel2.setBackground(new Color(123,123,15));
+		panel2.setBackground(new Color(182,146,37));
 		panel2.setLayout(null);
 		panel1.add(iconLabel);
 		panel2.add(iconLabel2);
@@ -162,7 +164,7 @@ public class LogInGUI extends JFrame implements ActionListener {
 		panel2.add(login);
 		add(panel1);
 		add(panel2);
-		
+	
 		//frame.add(panel1);
 	//	frame.setResizable(false);
 	//	namePanel.setSize(400,30);
