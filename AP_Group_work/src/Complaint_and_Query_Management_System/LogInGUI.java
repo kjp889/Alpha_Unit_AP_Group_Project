@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -33,64 +34,86 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
+import Complaint_and_Query_Management_System.Student;
 public class LogInGUI extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JLabel usernameLabel;
+	private JLabel usernameLabel,  usernameLabel2;
 	private JLabel passwordLabel;
-	private JTextField usernameTextField;
+	public static JTextField usernameTextField;
 	private JPasswordField passwordField;
 	private JButton button;
 	private JPanel namePanel;
 	private JPanel passwordPanel;
 	private JPanel buttonPanel;
-	private JInternalFrame iFrame;
+	//private JInternalFrame iFrame;
 	private JPanel panel1;
 	private JPanel panel2;
 	private JLabel iconLabel;
 	private JLabel iconLabel2;
 	private JLabel textLabel;
 	private JButton login;
-
+	public String id;
+	
+	//public String id;
+	
 	
 	//private static final Logger Logger = LogManager.getLogger(LogInGUI.class);
 
 	
 	public LogInGUI() {
 	//	iFrame = new JInternalFrame();
+		//s = new Student();
 		usernameLabel = new JLabel("USERNAME");
+		usernameLabel2 = new JLabel("USERNAME");
 		passwordLabel = new JLabel("PASSWORD");
 		textLabel = new JLabel("Student Login");
 		login = new JButton("Login");
 		login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				try {
-				
-					 
-					 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/utech","root","");
-					Statement stmt=con.createStatement();
-					String sql = "Select * from utech where id = '"+ usernameTextField.getText() +"'and last_name = '"+ passwordField.getText() + "'";
-					ResultSet rs = stmt.executeQuery(sql);
-					if(rs.next()) {
-						JOptionPane.showMessageDialog(null,"Login Successfully");
-						new LogInGUI().setVisible(false);
-						setVisible(false);
-						new Student_gui();
-				}
-					else
-						JOptionPane.showMessageDialog(null,"Incorect username and password");
-					con.close();
-					new LogInGUI().hide();
-				}catch (Exception e) {
-					System.out.print(e);
-				}
-				
-		}});
+			    try {
+			        // Establish a database connection
+			        Class.forName("com.mysql.cj.jdbc.Driver");
+			        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/utech", "root", "");
+
+			        // Create a SQL statement
+			        String sql = "SELECT * FROM utech WHERE id = ? AND last_name = ?";
+			        PreparedStatement stmt = con.prepareStatement(sql);
+			        stmt.setString(1, usernameTextField.getText());
+			        stmt.setString(2, passwordField.getText());
+			        //String id ;
+			        // Execute the SQL statement
+			        ResultSet rs = stmt.executeQuery();
+
+			        // Check if the user exists
+			        if (rs.next()) {
+			       //   id = rs.getString(usernameTextField.getText());
+			         //   System.out.println(id);
+			            JOptionPane.showMessageDialog(null, "Login Successfully");
+			        //    new LogInGUI().setVisible(false);
+			            setVisible(false);
+			         //   String user = usernameTextField.getText();
+			          //   StuHomeGui stu =  new StuHomeGui();
+			            // usernameLabel2.setBounds(200, 370, 600, 50);
+			            // stu.add(usernameLabel2);
+			            //System.out.println(stu.studId);
+			            new StuHomeGui();
+			        } else {
+			            JOptionPane.showMessageDialog(null, "Incorrect username and password");
+			        }
+
+			        // Close the database connection
+			        con.close();
+			       // new LogInGUI().hide();
+			    } catch (Exception e) {
+			        System.out.println(e);
+			    }
+			}
+		});
 			
-		
+	//	uName = usernameTextField.getText();
 		usernameTextField = new JTextField(20);
 		passwordField = new JPasswordField(20);
+		
 		button = new JButton("Sign In");
 		button.addActionListener(this);
 		button.setSize(new Dimension(400, 30));
@@ -105,7 +128,7 @@ public class LogInGUI extends JFrame implements ActionListener {
 		setBackground(Color.cyan);
 		setResizable(false);
 		setLayout(null);
-        ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(LogInGUI.class.getResource("/Logo.png")));
+        ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(LogInGUI.class.getResource("/LogoS.png")));
         // set the icon image and size of the frame
         setIconImage(icon.getImage());
         iconLabel = new JLabel(icon);
@@ -116,12 +139,13 @@ public class LogInGUI extends JFrame implements ActionListener {
       //  setIconImage(icon.getImage());
         iconLabel2 = new JLabel(icon2);
 
-        
+       
         // make the frame visible
         setVisible(true);
 		Panel();
 		setTitle("UTECH");
 	}
+	
 	private void button() {
 		login.setBounds(170, 500, 80, 30);
 	}
@@ -129,7 +153,7 @@ public class LogInGUI extends JFrame implements ActionListener {
 		usernameLabel.setFont(new Font("Calibri", Font.BOLD, 14));
 		usernameLabel.setBounds(20, 300 , 100, 50);
 		passwordLabel.setBounds(20, 400 , 100,50);
-		textLabel.setBounds(100, 200, 350, 30);
+		textLabel.setBounds(100, 200, 350, 50);
 		textLabel.setFont(new Font("Calibri", Font.BOLD, 35));
 		passwordLabel.setFont(new Font("Calibri", Font.BOLD, 14));
 		iconLabel.setBounds(20, 0, 150, 100);
@@ -150,7 +174,7 @@ public class LogInGUI extends JFrame implements ActionListener {
 		Label();
 		Textbox();
 		panel1.setBounds(0, 0, 550, 750);
-		panel1.setBackground(new Color(5,14,35));
+		panel1.setBackground(new Color(182,146,37));
 		panel2.setBounds(550, 0, 450, 750);
 		panel2.setBackground(new Color(182,146,37));
 		panel2.setLayout(null);
@@ -203,6 +227,7 @@ public class LogInGUI extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new LogInGUI();
+		
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

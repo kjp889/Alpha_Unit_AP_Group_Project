@@ -10,10 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,37 +24,46 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.mysql.cj.xdevapi.Statement;
-public class StuHomeGui extends JFrame  {
+public class ComplaintGui extends JFrame implements ActionListener {
 	
-	private JPanel panel1,panel2,panel3,nav,welcomePanel;
-	private JLabel iconLabel,iconLabel2,welcomeLabel;
-	private JButton chatBut, aboutBut,homeBut,complaintBut,queryBut;
-
-
+	private JPanel panel1,panel2,panel3,nav,welcomePanel, questions;
+	
+	private JLabel iconLabel,iconLabel2,welcomeLabel, messageLabel, questionsL;
+	private JButton chatBut, aboutBut,homeBut,complaintBut,queryBut, submit, insertButton;
+	private JTextField messageText;
+	String message;
+	private JComboBox<String> myComboBox;
 
 //	JPanel Panel1, Panel2;
-	public StuHomeGui() {
+	public ComplaintGui() {
 		
 
     
-
-
-
-
-	//	LogInGUI I = new LogInGUI();
-		//String m = I.text;
-	//	I.s.fName = id;
+		
+	    final String DB_URL = "jdbc:mysql://localhost:3306/utech";
+        final String DB_USERNAME = "root";
+        final String DB_PASSWORD = "";
+        // Initialize the UI components
+        String[] options = {"How can I change my password", "How can I access moodle", "Where are library doccuments"};
+        myComboBox = new JComboBox <String>(options);
+		submit = new JButton("SUBMIT");
+	//	myComboBox = new JComboBox<String>();
+		messageText = new JTextField();
+		//message = messageText.getText();
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		nav = new JPanel();
 		panel1= new JPanel();
 		panel2 = new JPanel();
 		panel3 = new JPanel();
 		welcomePanel = new JPanel();
-		
+		welcomeLabel = new JLabel("Make Complaint");
 		
 		iconLabel = new JLabel();
 		iconLabel2 =new JLabel();
+		messageLabel = new JLabel("MESSAGE");
+		
 		chatBut = new JButton("CHAT");
+		insertButton = new JButton("Insert");
 		aboutBut =new JButton("ABOUT");
 		homeBut = new JButton("HOME");
 		complaintBut = new JButton("COMPLAINT");
@@ -84,11 +96,43 @@ public class StuHomeGui extends JFrame  {
         ImageIcon icon3 = new ImageIcon(Toolkit.getDefaultToolkit().getImage(LogInGUI.class.getResource("/logoi.png")));
         iconLabel.setIcon(icon2);
         iconLabel2.setIcon(icon3);
-       
+        
+    
+        
+
+        // Add an action listener to the button to handle the insert action
+        insertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Get the selected item from the combo box
+                String selectedValue = (String) myComboBox.getSelectedItem();
+
+                try {
+                    // Create a connection to your SQL database
+                    Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+
+                    // Prepare an INSERT statement with a parameter for the selected value
+                    String query = "INSERT INTO message (message) VALUES (?)";
+                    PreparedStatement stmt = conn.prepareStatement(query);
+                    stmt.setString(1, selectedValue);
+
+                    // Execute the INSERT statement
+                    stmt.executeUpdate();
+
+                    // Close the statement and connection
+                    stmt.close();
+                    conn.close();
+
+                    // Display a success message
+                    JOptionPane.showMessageDialog(null, "Complaint sent successfully.");
+                } catch (SQLException ex) {
+                    // Display an error message if the insert fails
+                    JOptionPane.showMessageDialog(null, "Error inserting value: " + ex.getMessage());
+                }
+            }
+        });
         
 	}
-	
-
 	private void Button() {
 		chatBut.setBounds(1, 270, 300, 60);
 		chatBut.setBackground(Color.BLACK);
@@ -117,9 +161,30 @@ public class StuHomeGui extends JFrame  {
 		queryBut.setBackground(new Color(5,14,35));
 		queryBut.setForeground(Color.WHITE);
 		
-		
+		submit.setBounds(300,650 , 100, 50);
+		insertButton.setBounds(600, 650, 100, 50);
+	//	messageText.setBounds(200, 450, 300, 150);
+		submit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					message = messageText.getText();
+				    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/utech", "root", "");
+				    PreparedStatement stmt = con.prepareStatement("insert into message(message) values (?)");
+				    stmt.setString(1, message); // replace name with the variable containing customer's name
+				    
+				    int rowsAffected = stmt.executeUpdate();
+				    if (rowsAffected > 0) {
+				        JOptionPane.showMessageDialog(null, "Complaint Submitted");
+				    }
+				    con.close();
+				} catch (SQLException ex) {
+				    ex.printStackTrace();
+				}
+				
+		}});
 	}
-	
+
 	private void label() {
 		
 	
@@ -129,8 +194,7 @@ public class StuHomeGui extends JFrame  {
 		
 		
 		iconLabel2.setBounds(400, 25, 200, 200);
-		//LogInGUI L = new LogInGUI();
-		welcomeLabel = new JLabel("WELCOME" );
+		
 		welcomeLabel.setForeground(Color.WHITE);
 		welcomeLabel.setFont(new Font("Calibri", Font.BOLD, 20));
 	}
@@ -159,8 +223,16 @@ public class StuHomeGui extends JFrame  {
 		panel3.add(iconLabel2);
 		panel3.add(nav);
 		panel3.add(welcomePanel);
+		messageText.setBounds(200, 450, 300, 150);
+		messageLabel.setBounds(100, 450, 100, 50);
+		panel3.add(messageText);
+		panel3.add(messageLabel);
+		panel3.add(submit);
+		panel3.add( myComboBox);
+		panel3.add(insertButton);
 		
 		
+		myComboBox.setBounds(600, 500, 200, 50);
 		nav.setBounds(0, 270, 1000, 60);
 		nav.setVisible(true);
 		nav.setBackground(new Color(41,148,52));
@@ -176,14 +248,18 @@ public class StuHomeGui extends JFrame  {
 		welcomePanel.setBackground(new Color(5,14,35));
 		
 	} 
+	
+	
 
 
 	public static void main(String[] args) {	
 		
-		new StuHomeGui();
+		new ComplaintGui();
 }
-
-
-
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

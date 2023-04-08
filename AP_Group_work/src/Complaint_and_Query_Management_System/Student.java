@@ -1,8 +1,8 @@
 package Complaint_and_Query_Management_System;
 
 public class Student {
-	private int studId;
-	private String fName;
+	public String studId;
+	public String fName;
 	private String lName;
 	private String[] phone = new String[3];
 	private String email;
@@ -10,7 +10,7 @@ public class Student {
 	private java.sql.Connection stuConn;
 	
 	public Student() {
-		this.studId = 0;
+		this.studId = "";
 		this.fName = "";
 		this.lName = "";
 		this.phone = new String[3];
@@ -19,7 +19,7 @@ public class Student {
 		this.stuConn = DBConnectorComplaint.getDatabaseConnection(); 
 	}
 	
-	public Student(int studId, String fName, String lName, String phone1, String email, String password) {
+	public Student(String studId, String fName, String lName, String phone1, String email, String password) {
 		this.studId = studId;
 		this.fName = fName;
 		this.lName = lName;
@@ -28,7 +28,7 @@ public class Student {
 		this.password = password;
 	}
 	
-	public Student(int studId, String fName, String lName, String phone1, String phone2, String email, String password) {
+	public Student(String studId, String fName, String lName, String phone1, String phone2, String email, String password) {
 		this.studId = studId;
 		this.fName = fName;
 		this.lName = lName;
@@ -38,7 +38,7 @@ public class Student {
 		this.password = password;
 	}
 	
-	public Student(int studId, String fName, String lName, String phone1, String phone2, String phone3, String email, String password) {
+	public Student(String studId, String fName, String lName, String phone1, String phone2, String phone3, String email, String password) {
 		this.studId = studId;
 		this.fName = fName;
 		this.lName = lName;
@@ -58,11 +58,11 @@ public class Student {
 		this.password = student.password;
 	}
 
-	public int getStudId() {
+	public String getStudId() {
 		return studId;
 	}
 
-	public void setStudId(int studId) {
+	public void setStudId(String studId) {
 		this.studId = studId;
 	}
 
@@ -82,17 +82,6 @@ public class Student {
 		this.lName = lName;
 	}
 
-	public String getPhone1() {
-		return phone[0];
-	}
-	
-	public String getPhone2() {
-		return phone[1];
-	}
-	
-	public String getPhone3() {
-		return phone[2];
-	}
 
 	public void setPhone(String[] phone) {
 		this.phone = phone;

@@ -1,22 +1,31 @@
 package Complaint_and_Query_Management_System;
 
-import Complaint_and_Query_Management_System.LogInGUI;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-public class Student_gui extends JFrame  {
+
+import com.mysql.cj.xdevapi.Statement;
+public class Query extends JFrame  {
 	
 	private JPanel panel1,panel2,panel3,nav,welcomePanel;
 	
@@ -24,21 +33,24 @@ public class Student_gui extends JFrame  {
 	private JButton chatBut, aboutBut,homeBut,complaintBut,queryBut;
 	
 
+
 //	JPanel Panel1, Panel2;
-	public Student_gui() {
+	public Query() {
+		
+
+
+
+
+
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		nav = new JPanel();
 		panel1= new JPanel();
 		panel2 = new JPanel();
 		panel3 = new JPanel();
-	//	LogInGUI l =  new LogInGUI();
-	//	Student stu = new Student();
 		welcomePanel = new JPanel();
-		welcomeLabel = new JLabel("Frequently Asked Questions"  );
-		
+		welcomeLabel = new JLabel("FREQUENTLY ASKED QUESTIONS ");
 		
 		iconLabel = new JLabel();
-		
 		iconLabel2 =new JLabel();
 		chatBut = new JButton("CHAT");
 		aboutBut =new JButton("ABOUT");
@@ -60,7 +72,6 @@ public class Student_gui extends JFrame  {
 		add(panel1);
 		add(panel3);
 		
-		
 
 		Panel();
 	
@@ -71,14 +82,12 @@ public class Student_gui extends JFrame  {
         
         ImageIcon icon2 = new ImageIcon(Toolkit.getDefaultToolkit().getImage(LogInGUI.class.getResource("/icon2.png")));
        // iconLabel = new JLabel(icon2);
-        ImageIcon icon3 = new ImageIcon(Toolkit.getDefaultToolkit().getImage(LogInGUI.class.getResource("/logoI.png")));
+        ImageIcon icon3 = new ImageIcon(Toolkit.getDefaultToolkit().getImage(LogInGUI.class.getResource("/logoi.png")));
         iconLabel.setIcon(icon2);
         iconLabel2.setIcon(icon3);
        
+        
 	}
-	
-
-	
 	private void Button() {
 		chatBut.setBounds(1, 270, 300, 60);
 		chatBut.setBackground(Color.BLACK);
@@ -91,37 +100,32 @@ public class Student_gui extends JFrame  {
 		homeBut.setBounds(5, 5, 300, 50);
 		homeBut.setBackground(new Color(5,14,35));
 		homeBut.setForeground(Color.WHITE);
+	
 		
-		homeBut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new StuHomeGui();
-				setVisible(false);
-			}
-		});
 		complaintBut.setBounds(335, 5, 300, 50);
 		complaintBut.setBackground(new Color(5,14,35));
 		complaintBut.setForeground(Color.WHITE);
+		complaintBut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Student_gui();
+				setVisible(false);
+			}
+		});
 		
 		queryBut.setBounds(670, 5, 300, 50);
 		queryBut.setBackground(new Color(5,14,35));
 		queryBut.setForeground(Color.WHITE);
-/*	queryBut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new StuHomeGui();
-			}
-		});*/
+		
 		
 	}
 	
 	private void label() {
 		
-		nav.setBounds(0, 270, 1000, 60);
-		nav.setVisible(true);
-		nav.setBackground(new Color(41,148,52));
+	
 		iconLabel.setBackground(Color.red);
-		iconLabel.setLayout(null);  
+		iconLabel.setLayout(null);
 		iconLabel.setBounds(50, 30, 200, 200);
-		 
+		
 		
 		iconLabel2.setBounds(400, 25, 200, 200);
 		
@@ -153,24 +157,28 @@ public class Student_gui extends JFrame  {
 		panel3.add(iconLabel2);
 		panel3.add(nav);
 		panel3.add(welcomePanel);
+	//	panel3.add(dropdown);
 		
+		nav.setBounds(0, 270, 1000, 60);
+		nav.setVisible(true);
+		nav.setBackground(new Color(41,148,52));
 		nav.setLayout(null);
 		nav.add(homeBut);
 		nav.add(complaintBut);
 		nav.add(queryBut);
+		welcomePanel.add(welcomeLabel);
 		
 		
-	//	welcomePanel.add(welcomeLabel);
+		
 		welcomePanel.setBounds(200, 370, 600, 50);
 		welcomePanel.setBackground(new Color(5,14,35));
+		
 	} 
 
 
 	public static void main(String[] args) {	
 		
-		new Student_gui();
-		
-		
+		new  Query();
 }
 	
 }
